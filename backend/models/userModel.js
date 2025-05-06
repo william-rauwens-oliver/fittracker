@@ -4,22 +4,19 @@ export default class UserModel {
     }
   
     async createUser({ name, email, password, age, height, weight }) {
-      const query = `
-        INSERT INTO users (name, email, password, age, height, weight)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING *`;
-      const values = [name, email, password, age, height, weight];
-      const result = await this.db.query(query, values);
+      const result = await this.db.query(
+        `INSERT INTO users (name, email, password, age, height, weight)
+         VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+        [name, email, password, age, height, weight]
+      );
       return result.rows[0];
     }
   
     async findUserByEmail(email) {
-      const result = await this.db.query(`SELECT * FROM users WHERE email = $1`, [email]);
-      return result.rows[0];
-    }
-  
-    async findUserById(id) {
-      const result = await this.db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+      const result = await this.db.query(
+        `SELECT * FROM users WHERE email = $1`,
+        [email]
+      );
       return result.rows[0];
     }
   }

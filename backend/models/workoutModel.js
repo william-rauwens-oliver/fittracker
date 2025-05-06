@@ -3,8 +3,7 @@ export default class WorkoutModel {
       this.db = db;
     }
   
-    async createWorkout(userId, workout) {
-      const { title, date, duration, calories, exercises } = workout;
+    async createWorkout(userId, { title, date, duration, calories, exercises }) {
       const result = await this.db.query(
         `INSERT INTO workouts (user_id, title, date, duration, calories, exercises)
          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
@@ -14,7 +13,10 @@ export default class WorkoutModel {
     }
   
     async getWorkoutsByUser(userId) {
-      const result = await this.db.query(`SELECT * FROM workouts WHERE user_id = $1 ORDER BY date DESC`, [userId]);
+      const result = await this.db.query(
+        `SELECT * FROM workouts WHERE user_id = $1 ORDER BY date DESC`,
+        [userId]
+      );
       return result.rows;
     }
   
