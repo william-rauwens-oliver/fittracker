@@ -1,9 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense, lazy } from 'react';
 import axios from 'axios';
 import AddGoalForm from '../components/AddGoalForm';
 import AddWorkoutForm from '../components/AddWorkoutForm';
-import WorkoutChart from '../components/WorkoutChart';
-import LogoutButton from '../components/LogoutButton';
+
+import {
+  ChartBarIcon,
+  ClipboardDocumentListIcon,
+  FireIcon,
+} from '@heroicons/react/24/outline';
+
+// Lazy-load du composant graphique
+const WorkoutChart = lazy(() => import('../components/WorkoutChart'));
 
 export default function DashboardPage() {
   const [goals, setGoals] = useState([]);
@@ -13,68 +20,72 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!token) return;
 
-    const fetchGoals = async () => {
+    const fetchData = async () => {
+      console.time('fetchData');
       try {
-        const res = await axios.get('http://localhost:5000/api/goals', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setGoals(res.data);
+        const [goalsRes, workoutsRes] = await Promise.all([
+          axios.get('http://localhost:5000/api/goals', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get('http://localhost:5000/api/workouts', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+        setGoals(goalsRes.data);
+        setWorkouts(workoutsRes.data);
       } catch (err) {
-        console.error('Erreur lors du chargement des objectifs');
+        console.error('Erreur lors du chargement des données', err);
       }
+      console.timeEnd('fetchData');
     };
 
-    const fetchWorkouts = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/workouts', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setWorkouts(res.data);
-      } catch (err) {
-        console.error('Erreur lors du chargement des séances');
-      }
-    };
-
-    fetchGoals();
-    fetchWorkouts();
+    fetchData();
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-semibold">FitTracker</h1>
-          <LogoutButton />
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white px-6 py-10 ml-[260px]">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Goals Section */}
-        <section className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-medium mb-4">Objectifs</h2>
+        {/* Objectifs */}
+        <section className="bg-white rounded-xl shadow border border-gray-200 p-6 lg:col-span-3">
+          <div className="flex items-center gap-2 mb-4 text-slate-700">
+            <ClipboardDocumentListIcon className="h-6 w-6 text-indigo-500" />
+            <h2 className="text-lg font-semibold">Objectifs</h2>
+          </div>
+
           <AddGoalForm onAdd={(newGoal) => setGoals([newGoal, ...goals])} />
-          <ul className="mt-4 space-y-2">
-            {goals.map((goal) => (
-              <li key={goal.id} className="border rounded p-3">
-                <div className="font-semibold">{goal.type}</div>
+
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {goals.slice(0, 6).map((goal) => (
+              <div
+                key={goal.id}
+                className="p-4 bg-gray-50 border border-gray-100 rounded-md shadow-sm hover:shadow transition"
+              >
+                <div className="font-semibold text-gray-800">{goal.type}</div>
                 <div className="text-sm text-gray-600">
-                  Cible : {goal.target_value} {goal.unit}
+                  Objectif : {goal.target_value} {goal.unit}
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
 
-        {/* Workouts Section */}
-        <section className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-medium mb-4">Séances</h2>
+        {/* Séances */}
+        <section className="bg-white rounded-xl shadow border border-gray-200 p-6 lg:col-span-3">
+          <div className="flex items-center gap-2 mb-4 text-slate-700">
+            <FireIcon className="h-6 w-6 text-orange-500" />
+            <h2 className="text-lg font-semibold">Séances d’entraînement</h2>
+          </div>
+
           <AddWorkoutForm onAdd={(newWorkout) => setWorkouts([newWorkout, ...workouts])} />
-          <ul className="mt-4 space-y-2">
-            {workouts.map((w) => (
-              <li key={w.id} className="border rounded p-3">
-                <div className="font-semibold">{w.title}</div>
+
+          <ul className="mt-4 space-y-3">
+            {workouts.slice(0, 6).map((w) => (
+              <li
+                key={w.id}
+                className="p-4 bg-gray-50 border border-gray-100 rounded-md shadow-sm hover:shadow transition"
+              >
+                <div className="font-semibold text-gray-800">{w.title}</div>
                 <div className="text-sm text-gray-600">
                   {w.date} – {w.duration} min – {w.calories} kcal
                 </div>
@@ -83,16 +94,22 @@ export default function DashboardPage() {
           </ul>
         </section>
 
-        {/* Chart Section */}
-        <section className="md:col-span-2 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-medium mb-4">Statistiques</h2>
-          {workouts.length > 1 ? (
-            <WorkoutChart workouts={workouts} />
-          ) : (
-            <p className="text-gray-600">Ajoutez plus de séances pour voir les statistiques.</p>
-          )}
+        {/* Statistiques */}
+        <section className="bg-white rounded-xl shadow border border-gray-200 p-6 lg:col-span-3">
+          <div className="flex items-center gap-2 mb-4 text-slate-700">
+            <ChartBarIcon className="h-6 w-6 text-blue-600" />
+            <h2 className="text-lg font-semibold">Statistiques</h2>
+          </div>
+
+          <Suspense fallback={<p className="text-gray-500">Chargement du graphique…</p>}>
+            {workouts.length > 1 ? (
+              <WorkoutChart workouts={workouts} />
+            ) : (
+              <p className="text-gray-500">Ajoutez plus de séances pour visualiser les statistiques.</p>
+            )}
+          </Suspense>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

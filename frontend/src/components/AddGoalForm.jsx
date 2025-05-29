@@ -19,7 +19,7 @@ export default function AddGoalForm({ onAdd }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      onAdd(res.data); // mise à jour de la liste depuis le parent
+      onAdd(res.data);
       setMessage('Objectif ajouté !');
       setType('');
       setTargetValue('');
@@ -30,16 +30,17 @@ export default function AddGoalForm({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded shadow mb-6">
-      <h3 className="text-lg font-bold mb-3 text-purple-700">➕ Ajouter un objectif</h3>
+    <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded-md border border-gray-200">
+      <h3 className="text-md font-semibold text-purple-700 mb-3">+ Ajouter un objectif</h3>
       {message && <p className="text-sm mb-2 text-green-600">{message}</p>}
-      <div className="flex flex-col sm:flex-row gap-3">
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <input
           type="text"
           placeholder="Type (ex: Perte de poids)"
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="flex-1 px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full"
           required
         />
         <input
@@ -47,7 +48,7 @@ export default function AddGoalForm({ onAdd }) {
           placeholder="Valeur"
           value={target_value}
           onChange={(e) => setTargetValue(e.target.value)}
-          className="w-24 px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full"
           required
         />
         <input
@@ -55,12 +56,12 @@ export default function AddGoalForm({ onAdd }) {
           placeholder="Unité (kg, min, etc.)"
           value={unit}
           onChange={(e) => setUnit(e.target.value)}
-          className="w-24 px-3 py-2 border rounded"
+          className="px-3 py-2 border rounded w-full"
           required
         />
         <button
           type="submit"
-          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+          className="bg-purple-600 text-white rounded px-4 py-2 hover:bg-purple-700 transition w-full"
         >
           Ajouter
         </button>

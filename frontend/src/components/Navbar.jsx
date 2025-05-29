@@ -10,21 +10,37 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold text-purple-700">FitTracker</Link>
-
-      {token && (
-        <div className="flex items-center gap-4">
-          <Link to="/dashboard" className="text-gray-700 hover:text-purple-700">Dashboard</Link>
-          <Link to="/profil" className="text-gray-700 hover:text-purple-700">Profil</Link>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          >
-            Déconnexion
-          </button>
+    <div className="fixed top-0 left-0 h-full w-[250px] bg-white shadow-lg flex flex-col justify-between z-50">
+      <div>
+        <div className="p-6 border-b border-gray-200">
+          <Link to="/" className="text-2xl font-bold text-blue-600">
+            FitTracker
+          </Link>
         </div>
-      )}
-    </nav>
+
+        {token && (
+          <nav className="flex flex-col gap-4 p-6">
+            <Link
+              to="/dashboard"
+              className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/profil"
+              className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+            >
+              Profil
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="text-left text-gray-700 hover:text-red-600 transition-colors duration-200"
+            >
+              Déconnexion
+            </button>
+          </nav>
+        )}
+      </div>
+    </div>
   );
 }
