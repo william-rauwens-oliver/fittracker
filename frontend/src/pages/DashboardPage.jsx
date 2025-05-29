@@ -1,3 +1,5 @@
+// src/pages/DashboardPage.jsx
+
 import { useEffect, useState, Suspense, lazy } from 'react';
 import axios from 'axios';
 import AddGoalForm from '../components/AddGoalForm';
@@ -43,7 +45,7 @@ export default function DashboardPage() {
   }, [token]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white px-6 py-10 ml-[260px]">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white px-6 py-10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
 
         {/* Objectifs */}
