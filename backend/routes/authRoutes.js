@@ -7,21 +7,28 @@ import { getMyProfile, updateMyProfile } from '../controllers/userController.js'
 
 const router = express.Router();
 
+// ✅ Inscription avec gestion d'erreurs serveur
 router.post('/register', async (req, res) => {
-  const db = req.app.get('db');
-  const model = new UserModel(db);
-  const { name, email, password, age, height, weight } = req.body;
+  try {
+    const db = req.app.get('db');
+    const model = new UserModel(db);
+    const { name, email, password, age, height, weight } = req.body;
 
-  const existing = await model.findUserByEmail(email);
-  if (existing) return res.status(400).json({ message: 'Email déjà utilisé' });
+    const existing = await model.findUserByEmail(email);
+    if (existing) return res.status(400).json({ message: 'Email déjà utilisé' });
 
-  const hashed = await bcrypt.hash(password, 10);
-  const user = await model.createUser({ name, email, password: hashed, age, height, weight });
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    const hashed = await bcrypt.hash(password, 10);
+    const user = await model.createUser({ name, email, password: hashed, age, height, weight });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
 
-  res.status(201).json({ token, user });
+    res.status(201).json({ token, user });
+  } catch (err) {
+    console.error('Erreur dans /register:', err); // 👈 Log utile
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 });
 
+// ✅ Connexion
 router.post('/login', async (req, res) => {
   const db = req.app.get('db');
   const model = new UserModel(db);
@@ -36,7 +43,7 @@ router.post('/login', async (req, res) => {
   res.json({ token, user });
 });
 
-// ✅ Ajout des routes protégées
+// ✅ Routes protégées
 router.get('/me', authMiddleware, getMyProfile);
 router.put('/me', authMiddleware, updateMyProfile);
 
