@@ -1,4 +1,3 @@
-// src/components/GoalItem.jsx
 export default function GoalItem({ goal, onDelete, onEdit }) {
   return (
     <div className="p-4 bg-gray-50 border rounded shadow-sm hover:shadow transition">

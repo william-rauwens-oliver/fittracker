@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import pg from 'pg';
 import authRoutes from './routes/authRoutes.js';
-import goalRoutes from './routes/goalRoutes.js'; // ✅ ajout ici
+import goalRoutes from './routes/goalRoutes.js';
 import workoutRoutes from './routes/workoutRoutes.js';
 
 dotenv.config();
@@ -20,7 +20,7 @@ app.set('db', pool);
 
 // Enregistrement des routes
 app.use('/api/auth', authRoutes);
-app.use('/api/goals', goalRoutes); // ✅ ajout ici
+app.use('/api/goals', goalRoutes); 
 app.use('/api/workouts', workoutRoutes);
 
 // Route test

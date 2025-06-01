@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
 
     res.status(201).json({ token, user });
   } catch (err) {
-    console.error('Erreur dans /register:', err); // 👈 Log utile
+    console.error('Erreur dans /register:', err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
