@@ -24,7 +24,7 @@ export default function AddWorkoutForm({ onAdd }) {
       const workout = {
         ...form,
         exercises: form.exercises
-          ? form.exercises.split(',').map((e) => e.trim()) // string → array
+          ? form.exercises.split(',').map((e) => e.trim())
           : [],
       };
 

@@ -133,7 +133,7 @@ useEffect(() => {
                   placeholder="Unité"
                 />
                 <div className="flex gap-2">
-                  <button type="submit" className="px-4 py-2 bg-indigo-500 text-white rounded">Enregistrer</button>
+                  <button type="submit" className="px-4 py-2 bg-[#2463eb] text-white rounded">Enregistrer</button>
                   <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={() => setEditingGoal(null)}>Annuler</button>
                 </div>
               </form>
@@ -227,7 +227,7 @@ useEffect(() => {
                   placeholder="Calories"
                 />
                 <div className="flex gap-2">
-                  <button type="submit" className="px-4 py-2 bg-orange-500 text-white rounded">Enregistrer</button>
+                  <button type="submit" className="px-4 py-2 bg-[#2463eb] text-white rounded">Enregistrer</button>
                   <button type="button" className="px-4 py-2 bg-gray-300 rounded" onClick={() => setEditingWorkout(null)}>Annuler</button>
                 </div>
               </form>
