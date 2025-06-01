@@ -48,7 +48,7 @@ useEffect(() => {
     if (Notification.permission === 'granted') {
       new Notification("🏋️ Rappel FitTracker", {
         body: "N’oublie pas ton entraînement aujourd’hui !",
-        icon: "/185590.png", // optionnel : tu peux ajouter une icône
+        icon: "/185590.png",
       });
     } else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then(permission => {
@@ -64,7 +64,7 @@ useEffect(() => {
 
   const timer = setTimeout(() => {
     notifyUser();
-  }, 5000); // pour test rapide – à remplacer par 1000 * 60 * 60 * 20
+  }, 5000);
 
   return () => clearTimeout(timer);
 }, []);
