@@ -23,7 +23,7 @@ export default function ProfilePage() {
       };
 
       fetchUser();
-    }, 400); // délai de 400ms
+    }, 400);
 
     return () => clearTimeout(timeout);
   }, [token]);

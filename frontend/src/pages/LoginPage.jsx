@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -10,7 +9,6 @@ export default function LoginPage() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  // Si un token existe, redirige immédiatement vers le dashboard
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {

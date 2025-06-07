@@ -1,4 +1,3 @@
-// src/layouts/MainLayout.jsx
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
