@@ -1,4 +1,5 @@
-import { useState } from 'react';
+// src/pages/LoginPage.jsx
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,6 +9,14 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+
+  // Si un token existe, redirige immédiatement vers le dashboard
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,7 +29,7 @@ export default function LoginPage() {
       setSuccess('Connexion réussie ! Redirection en cours...');
       setError('');
       setTimeout(() => {
-        navigate('/dashboard');
+        navigate('/dashboard', { replace: true });
       }, 1000);
     } catch (err) {
       setError('Identifiants incorrects');
