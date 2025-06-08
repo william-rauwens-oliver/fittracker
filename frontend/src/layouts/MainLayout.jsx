@@ -8,7 +8,7 @@ export default function MainLayout({ children }) {
   return (
     <div className="flex">
       {!hideNavbar && <Navbar />}
-      <main className={`${!hideNavbar ? 'ml-[250px]' : ''} w-full min-h-screen bg-gray-100`}>
+      <main className={`${!hideNavbar ? 'lg:ml-[250px]' : ''} w-full min-h-screen bg-gray-100`}>
         {children}
       </main>
     </div>
