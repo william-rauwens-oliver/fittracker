@@ -7,7 +7,7 @@ import { getMyProfile, updateMyProfile } from '../controllers/userController.js'
 
 const router = express.Router();
 
-// ✅ Inscription avec gestion d'erreurs serveur
+// Inscription avec gestion d'erreurs serveur
 router.post('/register', async (req, res) => {
   try {
     const db = req.app.get('db');
@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ Connexion
+// Connexion
 router.post('/login', async (req, res) => {
   const db = req.app.get('db');
   const model = new UserModel(db);
@@ -43,7 +43,7 @@ router.post('/login', async (req, res) => {
   res.json({ token, user });
 });
 
-// ✅ Routes protégées
+// Routes protégées
 router.get('/me', authMiddleware, getMyProfile);
 router.put('/me', authMiddleware, updateMyProfile);
 
